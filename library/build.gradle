@@ -1,18 +1,17 @@
 apply plugin: 'com.android.library'
-apply plugin: 'maven-publish'
 
 def usingCMakeCompile() {
     /// define  gradle.ext.usingCMakeCompile = false to disable CMakeCompile Mode.
-    return gradle.ext != null && gradle.ext.has("usingCMakeCompile") && gradle.ext.usingCMakeCompile;
+    return true;
 }
 
 def usingCMakeCompileDebug() {
     /// define  gradle.ext.usingCMakeCompileDebug = true to enable CMake Debug Mode.
-    return gradle.ext != null && gradle.ext.has("usingCMakeCompileDebug") && gradle.ext.usingCMakeCompileDebug;
+    return false;
 }
 
 def disableVideoModule() {
-    return gradle.ext != null && gradle.ext.has("disableVideoModule") && gradle.ext.disableVideoModule;
+    return true;
 }
 
 android {
@@ -27,9 +26,9 @@ android {
         minSdkVersion rootProject.ext.android.minSdkVersion
         targetSdkVersion rootProject.ext.android.targetSdkVersion
 
-        buildConfigField("boolean", "CGE_USE_VIDEO_MODULE", "true")
+        buildConfigField("boolean", "CGE_USE_VIDEO_MODULE", disableVideoModule() ? "false" : "true")
 
-        if (true) {
+        if (usingCMakeCompile()) {
             externalNativeBuild {
                 cmake {
 
@@ -45,7 +44,7 @@ android {
                         cppExtraFlags = "-Os -DNDEBUG=1 -D_NDEBUG=1"
                     }
 
-                    if (true) {
+                    if (disableVideoModule()) {
                         cgeVideoModuleDef = "-DCGE_USE_VIDEO_MODULE=OFF"
                     } else {
                         cgeVideoModuleDef = "-DCGE_USE_VIDEO_MODULE=ON"
@@ -74,7 +73,7 @@ android {
         }
     }
 
-    if (true) {
+    if (usingCMakeCompile()) {
         externalNativeBuild {
             cmake {
                 path 'src/main/jni/CMakeLists.txt'
@@ -102,30 +101,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-            withJavadocJar()
-        }
-    }
     namespace 'org.wysaid.library'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:' + rootProject.ext.android.appcompatX
-}
-
-publishing {
-    publications {
-        release(MavenPublication) {
-            groupId = 'org.wysaid'
-            artifactId = 'gpuimage-plus'
-            version = '1.0.0'
-
-            afterEvaluate {
-                from components.release
-            }
-        }
-    }
 }
