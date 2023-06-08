@@ -8,8 +8,10 @@ import android.os.Bundle;
 
 
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -179,6 +181,7 @@ public class BasicImageDemoActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case REQUEST_CODE_PICK_IMAGE:
                 if (resultCode == RESULT_OK) {

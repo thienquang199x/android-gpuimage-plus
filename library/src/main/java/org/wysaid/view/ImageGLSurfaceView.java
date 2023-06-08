@@ -276,6 +276,20 @@ public class ImageGLSurfaceView extends GLSurfaceView implements Renderer {
         });
     }
 
+    public ImageGLSurfaceView(Context context, AttributeSet attrs, Boolean zOrderOnTop) {
+        super(context, attrs);
+
+        setEGLContextClientVersion(2);
+        setEGLConfigChooser(8, 8, 8, 8, 8, 0);
+        getHolder().setFormat(PixelFormat.RGBA_8888);
+        setZOrderOnTop(zOrderOnTop);
+        setRenderer(this);
+        setRenderMode(RENDERMODE_WHEN_DIRTY);
+//        setZOrderMediaOverlay(true);
+
+        Log.i(LOG_TAG, "ImageGLSurfaceView Construct...");
+    }
+
 
     public ImageGLSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -283,11 +297,6 @@ public class ImageGLSurfaceView extends GLSurfaceView implements Renderer {
         setEGLContextClientVersion(2);
         setEGLConfigChooser(8, 8, 8, 8, 8, 0);
         getHolder().setFormat(PixelFormat.RGBA_8888);
-        if (attrs != null){
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ImageGLSurfaceView);
-            setZOrderOnTop(a.getBoolean(R.styleable.ImageGLSurfaceView_zOrderOnTop, false));
-            a.recycle();
-        }
         setRenderer(this);
         setRenderMode(RENDERMODE_WHEN_DIRTY);
 //        setZOrderMediaOverlay(true);
