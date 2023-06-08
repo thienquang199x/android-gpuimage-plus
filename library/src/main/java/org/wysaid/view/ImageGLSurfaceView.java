@@ -1,6 +1,7 @@
 package org.wysaid.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.opengl.GLES20;
@@ -10,6 +11,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 import org.wysaid.common.Common;
+import org.wysaid.library.R;
 import org.wysaid.nativePort.CGEImageHandler;
 import org.wysaid.texUtils.TextureRenderer;
 
@@ -281,6 +283,10 @@ public class ImageGLSurfaceView extends GLSurfaceView implements Renderer {
         setEGLContextClientVersion(2);
         setEGLConfigChooser(8, 8, 8, 8, 8, 0);
         getHolder().setFormat(PixelFormat.RGBA_8888);
+        if (attrs != null){
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ImageGLSurfaceView);
+            setZOrderOnTop(a.getBoolean(R.styleable.ImageGLSurfaceView_zOrderOnTop, false));
+        }
         setRenderer(this);
         setRenderMode(RENDERMODE_WHEN_DIRTY);
 //        setZOrderMediaOverlay(true);
