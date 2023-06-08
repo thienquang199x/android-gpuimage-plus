@@ -286,6 +286,7 @@ public class ImageGLSurfaceView extends GLSurfaceView implements Renderer {
         if (attrs != null){
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ImageGLSurfaceView);
             setZOrderOnTop(a.getBoolean(R.styleable.ImageGLSurfaceView_zOrderOnTop, false));
+            a.recycle();
         }
         setRenderer(this);
         setRenderMode(RENDERMODE_WHEN_DIRTY);
